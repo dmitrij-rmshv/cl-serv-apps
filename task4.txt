@@ -1,0 +1,46 @@
+>>> 
+>>> str41 = 'разработка'
+>>> byte41 = str41.encode('utf-8')
+>>> byte41
+b'\xd1\x80\xd0\xb0\xd0\xb7\xd1\x80\xd0\xb0\xd0\xb1\xd0\xbe\xd1\x82\xd0\xba\xd0\xb0'
+>>> 
+>>> str42 = 'администрирование'
+>>> byte42 = str.encode(str42, encoding='utf-8')
+>>> byte42
+b'\xd0\xb0\xd0\xb4\xd0\xbc\xd0\xb8\xd0\xbd\xd0\xb8\xd1\x81\xd1\x82\xd1\x80\xd0\xb8\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb0\xd0\xbd\xd0\xb8\xd0\xb5'
+>>>  
+>>> str43 = 'protocol'
+>>> byte43 = str43.encode('utf-8')
+>>> byte43
+b'protocol'
+>>> 
+>>> str44 = 'standard'
+>>> byte44 = str.encode(str44, 'utf-8')
+>>> byte44
+b'standard'
+>>> 
+>>> str41rev = byte41.decode('utf-8')
+>>> str41rev
+'разработка'
+>>> str41 == str41rev
+True
+>>> 
+>>> str42rev = bytes.decode(byte42, encoding='utf-8')
+>>> str42rev
+'администрирование'
+>>> str42 == str42rev
+True
+>>> 
+>>> str43rev = byte43.decode('utf-8')
+>>> str43rev
+'protocol'
+>>> str43 == str43rev
+True
+>>> 
+>>> str44rev = bytes.decode(byte44, 'utf-8')
+>>> str44rev
+'standard'
+>>> str44 == str44rev
+True
+>>> 
+

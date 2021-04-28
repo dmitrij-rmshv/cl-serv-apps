@@ -1,0 +1,8 @@
+>>> byte21, byte22, byte23 = b'class', b"function", b'''method'''
+>>> type(byte21), type(byte22), type(byte23)
+(<class 'bytes'>, <class 'bytes'>, <class 'bytes'>)
+>>> byte21, byte22, byte23
+(b'class', b'function', b'method')
+>>> len(byte21), len(byte22), len(byte23)
+(5, 8, 6)
+
