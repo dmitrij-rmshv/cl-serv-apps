@@ -1,0 +1,21 @@
+>>> str1, str2, str3 = разработка, сокет, декоратор
+>>> str1, str2, str3
+('разработка', 'сокет', 'декоратор')
+>>> type(str1), type(str2), type(str3)
+(<class 'str'>, <class 'str'>, <class 'str'>)
+>>> str1_u = xd1x80xd0xb0xd0xb7xd1x80xd0xb0xd0xb1xd0xbexd1x82xd0xbaxd0xb0
+>>> str2_u = xd1x81xd0xbexd0xbaxd0xb5xd1x82
+>>> str3_u = xd0xb4xd0xb5xd0xbaxd0xbexd1x80xd0xb0xd1x82xd0xbexd1x80
+>>> str1_u, str2_u, str3_u
+('Ñ\x80Ð°Ð·Ñ\x80Ð°Ð±Ð¾Ñ\x82ÐºÐ°', 'Ñ\x81Ð¾ÐºÐµÑ\x82', 'Ð´ÐµÐºÐ¾Ñ\x80Ð°Ñ\x82Ð¾Ñ\x80')
+>>> type(str1_u), type(str2_u), type(str3_u)
+(<class 'str'>, <class 'str'>, <class 'str'>)
+>>> str1_u16 = u0440u0430u0437u0440u0430u0431u043eu0442u043au0430
+>>> str2_u16 = u0441u043eu043au0435u0442
+>>> str3_u16 = u0434u0435u043au043eu0440u0430u0442u043eu0440
+>>> str1_u16, str2_u16, str3_u16
+('разработка', 'сокет', 'декоратор')
+>>> type(str1_u16), type(str2_u16), type(str3_u16)
+(<class 'str'>, <class 'str'>, <class 'str'>)
+>>> 
+

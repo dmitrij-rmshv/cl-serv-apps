@@ -1,0 +1,13 @@
+>>> byte31 = b'attribute'
+>>> 
+>>> byte32 = b'класс'
+  File "<stdin>", line 1
+SyntaxError: bytes can only contain ASCII literal characters.
+>>> 
+>>> byte33 = b'функция'
+  File "<stdin>", line 1
+SyntaxError: bytes can only contain ASCII literal characters.
+>>> 
+>>> byte34 = b'type'
+
+===Строки с кириллическими символами невозможно записать в байтовом типе===
