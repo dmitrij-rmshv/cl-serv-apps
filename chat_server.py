@@ -25,23 +25,26 @@ def create_parser():
     parser.add_argument('-a', '--address', default='')
     return parser
 
-parser = create_parser()
-arg = parser.parse_args(argv[1:])
 
-s = socket(AF_INET, SOCK_STREAM)
-s.bind((arg.address, int(arg.port)))
-s.listen(5)
+if __name__ == '__main__':
+        
+    parser = create_parser()
+    arg = parser.parse_args(argv[1:])
 
-while True:
-    client, addr = s.accept()
-    data = pickle.loads(client.recv(640))
-    if data['action'] == 'presence':
-        print(f'presence message received from client {addr[0]} at {time.strftime("%H:%M:%S", time.localtime(data["time"]))}')
-        response = {
-            "response": 202,
-            "time": time.time(),
-            "alert": "chat-server confirm connection"
-        }
-        client.send(pickle.dumps(response))
+    s = socket(AF_INET, SOCK_STREAM)
+    s.bind((arg.address, int(arg.port)))
+    s.listen(5)
 
-    client.close()
+    while True:
+        client, addr = s.accept()
+        data = pickle.loads(client.recv(640))
+        if data['action'] == 'presence':
+            print(f'presence message received from client {addr[0]} at {time.strftime("%H:%M:%S", time.localtime(data["time"]))}')
+            response = {
+                "response": 202,
+                "time": time.time(),
+                "alert": "chat-server confirm connection"
+            }
+            client.send(pickle.dumps(response))
+
+        client.close()
