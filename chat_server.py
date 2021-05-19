@@ -8,16 +8,21 @@ import log.server_log_config
 
 logger = logging.getLogger('server_app')
 
+def log(func):
+    def deco(*args, **kwargs):
+        logger.info(f'function "{func.__name__}"" running')
+        r = func(*args, **kwargs)        
+        return r
+    return deco
+
+@log
 def create_parser():
     parser = ArgumentParser()
     parser.add_argument('-p', '--port', default=7777)
     parser.add_argument('-a', '--address', default='')
-    logger.info('function "create_parser()" executed')
     return parser
 
-
-if __name__ == '__main__':
-        
+def main():
     parser = create_parser()
     arg = parser.parse_args(argv[1:])
 
@@ -38,3 +43,10 @@ if __name__ == '__main__':
             client.send(pickle.dumps(response))
 
         client.close()
+
+
+if __name__ == '__main__':
+
+    main()
+        
+
