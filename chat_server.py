@@ -41,7 +41,8 @@ def read_requests(r_clients, all_clients):
         try:
             requests[sock] = pickle.loads(sock.recv(640))
         except:
-            print('Клиент {} {} отключился'.format(sock.fileno(), sock.getpeername()))
+            # print('Клиент {} {} отключился'.format(sock.fileno(), sock.getpeername()))
+            print('Клиент  отключился')
             all_clients.remove(sock)
     return requests
 
@@ -71,6 +72,8 @@ def write_responses(requests, w_clients, all_clients):
     for sock in requests:
         if requests[sock]['action'] == 'msg':
             response = requests[sock]
+            msg_copy = requests[sock]['message']
+            logger.info(f'text message "{msg_copy}" received from client {sock.getpeername()}')
             for receiver in all_clients:
                 receiver.send(pickle.dumps(response))
 
@@ -109,5 +112,3 @@ def main():
 if __name__ == '__main__':
 
     main()
-        
-
