@@ -42,6 +42,19 @@ def reading_messages(s):
         data = pickle.loads(s.recv(640))
         print(f'От: {data["from"]} сообщение: --{data["message"]}--')
 
+def presence_msg_send(s, nik):
+    presence = {
+        "action": "presence",
+        "time": time.time(),
+        "type": "status",
+        "user": {
+            "account_name": nik,
+            "status": "Yep, I am here!"
+        }
+    }
+    send_msg(s, presence)
+    return
+
 @log
 def communication(s, name):
     role = ''  # выбор работы клиента в качестве отправителя либо получателя сообщений
@@ -64,21 +77,13 @@ def main():
     s = socket(AF_INET, SOCK_STREAM)
     s.connect((addr, port))
 
-    account_name = "C0deMaver1ck"
+    account_name = input("Введите имя(ник): ") or "guest_user"
 
-    presence = {
-        "action": "presence",
-        "time": time.time(),
-        "type": "status",
-        "user": {
-            "account_name": account_name,
-            "status": "Yep, I am here!"
-        }
-    }
-    send_msg(s, presence)
+    presence_msg_send(s, account_name)    
 
     server_msg = rcv_msg(s)
     if server_msg['response']:
+        print(f'Добро пожаловать в чат, {account_name}')
         logger.info("%(alert)s with code %(response)s", server_msg)
 
     communication(s, account_name)    # основная функция чата
