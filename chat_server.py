@@ -1,18 +1,3 @@
-'''Практическое задание
-
-Реализовать простое клиент-серверное взаимодействие по протоколу JIM (JSON instant messaging):
-    клиент отправляет запрос серверу;
-    сервер отвечает соответствующим кодом результата.
-Клиент и сервер должны быть реализованы в виде отдельных скриптов, содержащих соответствующие функции.
-
-Функции сервера:
-    принимает сообщение клиента;
-    формирует ответ клиенту;
-    отправляет ответ клиенту;
-    имеет параметры командной строки:
-        -p <port> — TCP-порт для работы (по умолчанию использует 7777);
-        -a <addr> — IP-адрес для прослушивания (по умолчанию слушает все доступные адреса).'''
-
 from socket import socket, AF_INET, SOCK_STREAM
 import time
 import pickle
@@ -25,15 +10,18 @@ def create_parser():
     parser.add_argument('-a', '--address', default='')
     return parser
 
+def new_listen_socket(sock_parms):
+    sock = socket(AF_INET, SOCK_STREAM)
+    sock.bind((sock_parms.address, int(sock_parms.port)))
+    sock.listen(5)
+    return sock
 
-if __name__ == '__main__':
-        
+
+def main():
     parser = create_parser()
     arg = parser.parse_args(argv[1:])
 
-    s = socket(AF_INET, SOCK_STREAM)
-    s.bind((arg.address, int(arg.port)))
-    s.listen(5)
+    s = new_listen_socket(arg)
 
     while True:
         client, addr = s.accept()
@@ -48,3 +36,10 @@ if __name__ == '__main__':
             client.send(pickle.dumps(response))
 
         client.close()
+
+
+if __name__ == '__main__':
+
+    main()
+        
+
