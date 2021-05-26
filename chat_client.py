@@ -4,13 +4,15 @@ import time
 from sys import argv, exit
 import logging
 import log.client_log_config
+from functools import wraps
+import inspect
 
 logger = logging.getLogger('client')
 
 def log(func):
     def deco(*args, **kwargs):
         r = func(*args, **kwargs)
-        logger.info(f'{func.__name__} running')        
+        logger.info(f'Функция "{func.__name__}" вызвана из функции "{inspect.stack()[1][3]}".')    
         return r
     return deco
 

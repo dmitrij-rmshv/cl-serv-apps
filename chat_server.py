@@ -5,13 +5,15 @@ from sys import argv
 from argparse import ArgumentParser
 import logging
 import log.server_log_config
+from functools import wraps
+import inspect
 
 logger = logging.getLogger('server_app')
 
 def log(func):
     def deco(*args, **kwargs):
-        logger.info(f'function "{func.__name__}"" running')
-        r = func(*args, **kwargs)        
+        r = func(*args, **kwargs)
+        logger.info(f'Функция "{func.__name__}" вызвана из функции "{inspect.stack()[1][3]}".')    
         return r
     return deco
 
