@@ -10,12 +10,14 @@ import select
 
 logger = logging.getLogger('server_app')
 
+
 def log(func):
     def deco(*args, **kwargs):
         logger.info(f'function "{func.__name__}"" running')
-        r = func(*args, **kwargs)        
+        r = func(*args, **kwargs)
         return r
     return deco
+
 
 @log
 def new_listen_socket(sock_parms):
@@ -25,12 +27,14 @@ def new_listen_socket(sock_parms):
     sock.settimeout(0.2)
     return sock
 
+
 @log
 def create_parser():
     parser = ArgumentParser()
     parser.add_argument('-p', '--port', default=7777)
     parser.add_argument('-a', '--address', default='')
     return parser
+
 
 def read_requests(r_clients, all_clients):
     """ Чтение запросов из списка клиентов
@@ -46,6 +50,7 @@ def read_requests(r_clients, all_clients):
             all_clients.remove(sock)
     return requests
 
+
 @log
 def write_responses(requests, w_clients, all_clients):
     """ Эхо-ответ сервера клиентам, от которых были запросы
@@ -56,7 +61,10 @@ def write_responses(requests, w_clients, all_clients):
             try:
                 # Подготовить и отправить ответ сервера
                 if requests[sock]['action'] == 'presence':
-                    logger.info(f'presence message received from client {sock.getpeername()}')
+                    interlocutors[requests[sock]
+                                  ['user']['account_name']] = sock
+                    logger.info(
+                        f'presence message received from client {sock.getpeername()}')
                     response = {
                         "response": 202,
                         "time": time.time(),
@@ -65,24 +73,59 @@ def write_responses(requests, w_clients, all_clients):
                     sock.send(pickle.dumps(response))
 
             except:  # Сокет недоступен, клиент отключился
-                print('Клиент {} {} отключился'.format(sock.fileno(), sock.getpeername()))
+                print('Клиент {} {} отключился'.format(
+                    sock.fileno(), sock.getpeername()))
                 sock.close()
                 all_clients.remove(sock)
 
     for sock in requests:
+
         if requests[sock]['action'] == 'msg':
             response = requests[sock]
             msg_copy = requests[sock]['message']
-            logger.info(f'text message "{msg_copy}" received from client {sock.getpeername()}')
-            for receiver in all_clients:
-                receiver.send(pickle.dumps(response))
+            logger.info(
+                f'text message "{msg_copy}" received from client {sock.getpeername()}')
+
+            if requests[sock]['to'].startswith('#'):
+                for group_member in groups[requests[sock]['to']]:
+                    if group_member != sock:
+                        try:
+                            group_member.send(pickle.dumps(response))
+                        except Exception as e:
+                            pass
+            else:
+                try:
+                    interlocutors[requests[sock]['to']].send(
+                        pickle.dumps(response))
+                except Exception as e:
+                    pass
+
+        elif requests[sock]['action'] == 'quit':
+            print(f'deleting: {requests[sock]["action"]}\n{requests[sock]}')
+            # del interlocutors[requests[sock]]
+
+        elif requests[sock]['action'] == 'join':
+            if requests[sock]['room'] not in groups:
+                groups[requests[sock]['room']] = [sock, ]
+                response = {
+                    "response": 100,
+                    "alert": f'Группа найдена не была. Группа {requests[sock]["room"]} создана'
+                }
+                sock.send(pickle.dumps(response))
+            else:
+                groups[requests[sock]['room']].append(sock)
+            print(f'joining : groups : {groups}')
+
+            # try:
+            #     pass
+            # except Exception as e:
+            #     pass
 
 
 def main():
     arg = create_parser().parse_args(argv[1:])
     s = new_listen_socket(arg)
     clients = []
-
 
     while True:
         try:
@@ -100,15 +143,17 @@ def main():
             try:
                 r, w, e = select.select(clients, clients, [], wait)
             except Exception as e:
-            # Исключение произойдет, если какой-то клиент отключится
+                # Исключение произойдет, если какой-то клиент отключится
                 pass        # Ничего не делать, если какой-то клиент отключился
-            
+
             requests = read_requests(r, clients)  # Сохраним запросы клиентов
             if requests:
-                write_responses(requests, w, clients)  # Выполним отправку ответов клиентам
-
+                # Выполним отправку ответов клиентам
+                write_responses(requests, w, clients)
 
 
 if __name__ == '__main__':
 
+    interlocutors = {}
+    groups = {}
     main()
