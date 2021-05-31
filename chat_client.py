@@ -104,9 +104,9 @@ def presence_msg_send(s, nik):
 def communication(s, name):
     while True:
         action_choice = ''
-        while action_choice != 's' and action_choice != 'c' and action_choice != 'g':
+        while action_choice != 's' and action_choice != 'g':
             action_choice = input(
-                '\u2193\u2193\u2193 Введите желаемое действие \u2193\u2193\u2193\n сообщение пользователю (g), \n сообщение группе     (c), \n покинуть программу    (q)? : ')
+                '\u2193\u2193\u2193 Введите желаемое действие \u2193\u2193\u2193\n сообщение пользователю (s), \n сообщение группе     (g), \n покинуть программу    (q)? : ')
 
         if action_choice == 's':
             sending_messages(s, name)

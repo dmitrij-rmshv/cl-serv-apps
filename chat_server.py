@@ -116,11 +116,6 @@ def write_responses(requests, w_clients, all_clients):
                 groups[requests[sock]['room']].append(sock)
             print(f'joining : groups : {groups}')
 
-            # try:
-            #     pass
-            # except Exception as e:
-            #     pass
-
 
 def main():
     arg = create_parser().parse_args(argv[1:])
